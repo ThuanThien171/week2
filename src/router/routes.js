@@ -3,13 +3,13 @@ import ProductsPage from "@/pages/ProductsPage.vue";
 let dashRoutes = [
     {
         title: 'Sản phẩm',
-        icon: '@/assets/box.svg',
+        icon: 'box',
         path: '/products',
         component: ProductsPage,
     },
     {   
         title: 'Users',
-        icon: '@/assets/users.svg',
+        icon: 'user',
         path: '/users',
         component: UsersPage,
     },
