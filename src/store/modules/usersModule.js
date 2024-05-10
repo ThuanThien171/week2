@@ -9,6 +9,14 @@ export default {
     getters: {
         getUserList(state) {
             return state.users;
+        },
+        getUserInfo(state){
+            return (payload) =>{
+                const userInfo = state.users.filter((data)=>{
+                    if(data.id === payload) return data;
+                });
+                return userInfo[0];
+            }
         }
     },
     mutations: {
@@ -90,8 +98,12 @@ export default {
                 phone: payload.phone,
                 avatar: payload.avatar,
             }
-            //const res = await axios.put("users/"+payload.id+".json",newUser)    //đăng ký auth
-            const res = await axios.post("users.json",newUser) 
+            let res = null;
+            if(payload.id){
+                res = await axios.put("users/"+payload.id+".json",newUser);   //thêm khi có id
+            }else{
+                res = await axios.post("users.json",newUser) ;
+            }
             if (res.status !== 200){
                 const error = new Error(res.data.message || "Thêm thông tin người dùng thất bại");
                 throw error;

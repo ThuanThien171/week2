@@ -24,7 +24,7 @@
                     >
                         <div class="avatar">
                             <div class="status"></div>
-                            <img :src="imgLink">
+                            <img :src="avatarImg">
                         </div>
                     </v-btn>
                 </template>
@@ -55,9 +55,20 @@ export default {
         }
     },
     computed: {
-        ...mapGetters([
-            'sideBarState',
-        ]),
+        ...mapGetters({
+            sideBarState: 'sideBarState',
+            getUserInfo: 'users/getUserInfo',
+            getUserId: 'auth/getUserId',
+        }),
+        avatarImg() {
+            const userId = this.getUserId;
+            const userInfo = this.getUserInfo(userId);
+            let avatarimg = null;
+            if(userInfo){
+                if(userInfo.avatar) avatarimg = userInfo.avatar;
+            }
+            return (avatarimg) ? avatarimg : this.imgLink;
+        }
     },
     methods: {
         ...mapMutations([
