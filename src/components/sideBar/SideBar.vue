@@ -13,7 +13,12 @@
             :key="route.title"
             @click="gotoPage(route.path)"
             >
-                <img :src="route.icon">
+                <box-icon v-if="route.icon === 'box'" 
+                :strokeColor="(route.path === currentRoute)? '#23272E':'#8B909A'"
+                ></box-icon>
+                <user-icon v-if="route.icon === 'user'"
+                :strokeColor="(route.path === currentRoute)? '#23272E':'#8B909A'"
+                ></user-icon>
                 {{ route.title }}
             </div>
         </div>
@@ -23,7 +28,10 @@
 <script>
 import dashRoutes from '@/router/routes';
 import { mapGetters, mapMutations } from 'vuex';
+import boxIcon from '../icons/boxIcon.vue';
+import userIcon from '../icons/userIcon.vue';
 export default {
+  components: { boxIcon, userIcon },
     data() {
         return {
         }
@@ -117,5 +125,11 @@ export default {
     .activeRouteLink {
         color: #23272E;
         background: #F3F4F8;
+    }
+    .routeLink .box-icon {
+        stroke: #8B909A !important;
+    }
+    .activeRouteLink .box-icon {
+        stroke: #23272E !important;
     }
 </style>
