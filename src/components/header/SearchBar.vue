@@ -13,7 +13,7 @@ export default {
     emits: ['changeSearchKey'],
     methods: {
         handleChangeInput(e) {
-            this.$emit('changeSearchKey',e.target.value)
+            this.$emit('changeSearchKey',e.target.value.trim())
         }
     }
 }

@@ -7,6 +7,7 @@
     item-key="id"
     :page="page"
     :items-per-page="itemsPerPage"
+    @update:current-items="getDatalength"
     >
         <template v-slot:headers>
             <tr class="tableHeader">
@@ -64,7 +65,7 @@
                         :items="[5, 10, 20, 50, 'All']"
                         variant="outlined"
                     ></v-select>
-                        of {{ getTableData.length }}
+                        of {{(filterItem!==null) ? filterItem : getTableData.length }}
                 </div>
                 <v-pagination
                     size="28px"
@@ -92,6 +93,8 @@ export default {
         return {
             page: 1,
             numPerPage: 10,
+            filterItem: null,
+            currentItems: 0,
             headerTitles: [
                 { title: 'TÊN SẢN PHẨM', align: 'start', sortable: false, key: 'name' },
                 { title: 'GIÁ', align: 'start', key: 'price' },
@@ -108,6 +111,21 @@ export default {
         onOpen(val){
             if(!val) this.data = null;
         },
+        seacrhKey(val){
+            this.page = 1;
+            if(val !== ''){
+                this.numPerPage = 'All';
+            }else{
+                this.numPerPage = 10;
+                this.filterItem = null;
+            }
+        },
+        currentItems(val) {
+            if(this.numPerPage === 'All' && this.seacrhKey !== ''){
+                this.filterItem = val;
+                console.log(this.filterItem)
+            }
+        },
     },
     computed: {
         itemsPerPage() {
@@ -117,11 +135,16 @@ export default {
             return +this.numPerPage;
         },
         pagesnumber(){
-            const check = this.getTableData.length % this.itemsPerPage;
+            let check = this.getTableData.length % this.itemsPerPage;
+            let pageNums = Math.floor(this.getTableData.length / this.itemsPerPage);
+            if(this.filterItem) {
+                check = this.filterItem % this.itemsPerPage;
+                pageNums = Math.floor(this.filterItem / this.itemsPerPage);
+            }
             if(check != 0){
-                return Math.floor(this.getTableData.length / this.itemsPerPage) + 1;
+                return pageNums + 1;
             }else{
-                return Math.floor(this.getTableData.length / this.itemsPerPage);
+                return pageNums;
             }
         },
         getTableData() {
@@ -196,7 +219,11 @@ export default {
             //       text: error || 'Xóa sản phẩm thất bại!',
             //     })
             // }
-        }
+        },
+
+        getDatalength(e) {
+            this.currentItems = e?.length;
+        },
     }
 }
 </script>
